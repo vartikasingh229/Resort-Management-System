@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WartikaSingh Resort — Advanced Management System</title>
+  <style>
+    :root {
+      --primary: #7b3f00;
+      --primary2: #b76e2b;
+      --dark: #3e1f00;
+      --accent: #f3c677;
+      --bg: #fff8ed;
+      --card: #fffdf8;
+      --text: #3b2a1f;
+      --muted: #806f63;
+      --border: #eadbc8;
+      --danger: #c62828;
+      --warning: #d98c00;
+      --info: #6b5ca5;
+      --success: #38761d;
+      --shadow: 0 8px 24px rgba(92, 55, 20, .10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: .25s
+    }
+
+    body.dark {
+      --primary: #d59a52;
+      --primary2: #e5ad68;
+      --dark: #241205;
+      --accent: #f3c677;
+      --bg: #17100b;
+      --card: #241a12;
+      --text: #f7eadb;
+      --muted: #c4ae9a;
+      --border: #493425;
+      --shadow: 0 8px 26px rgba(0, 0, 0, .28)
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      background: linear-gradient(180deg, #8b4a12, #3e1f00 88%);
+      color: #fff;
+      padding: 22px 14px;
+      z-index: 20;
+      box-shadow: 6px 0 22px rgba(62, 31, 0, .18)
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      letter-spacing: .3px
+    }
+
+    .logo span {
+      color: #f3c677
+    }
+
+    .menu button {
+      display: block;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      padding: 12px 15px;
+      margin: 4px 0;
+      border-radius: 9px;
+      font-size: 14px
+    }
+
+    .menu button:hover,
+    .menu button.active {
+      background: rgba(255, 255, 255, .18)
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      bottom: 18px;
+      left: 15px;
+      right: 15px;
+      font-size: 12px;
+      opacity: .8;
+      text-align: center
+    }
+
+    .main {
+      margin-left: 250px;
+      padding: 20px;
+      min-height: 100vh
+    }
+
+    .topbar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 15px 20px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+      margin-bottom: 20px
+    }
+
+    .topbar h2 {
+      color: var(--primary2);
+      letter-spacing: .2px
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .admin {
+      background: #e0f2f1;
+      color: var(--dark);
+      padding: 8px 13px;
+      border-radius: 20px;
+      font-weight: 700
+    }
+
+    body.dark .admin {
+      background: #263b48;
+      color: #b9f1ea
+    }
+
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px
+    }
+
+    .card,
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow)
+    }
+
+    .card {
+      padding: 19px
+    }
+
+    .card h4 {
+      color: var(--muted);
+      margin-bottom: 8px
+    }
+
+    .number {
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--primary2)
+    }
+
+    .icon {
+      float: right;
+      font-size: 27px
+    }
+
+    .section {
+      padding: 20px;
+      margin-bottom: 20px
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 17px
+    }
+
+    .section-header h3 {
+      color: var(--primary2)
+    }
+
+    .btn {
+      border: 0;
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-weight: 700
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #b76e2b, #7b3f00);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(123, 63, 0, .18)
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #8f5018, #3e1f00);
+      transform: translateY(-1px)
+    }
+
+    .btn-danger {
+      background: #ef5350;
+      color: #fff
+    }
+
+    .btn-warning {
+      background: #ffb300;
+      color: #222
+    }
+
+    .btn-info {
+      background: #0288d1;
+      color: #fff
+    }
+
+    .btn-secondary {
+      background: #64748b;
+      color: #fff
+    }
+
+    .btn-sm {
+      padding: 6px 9px;
+      font-size: 12px
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px
+    }
+
+    .search {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      min-width: 230px
+    }
+
+    .table-container {
+      overflow: auto
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px
+    }
+
+    th,
+    td {
+      padding: 11px;
+      border-bottom: 1px solid var(--border);
+      text-align: left
+    }
+
+    th {
+      background: #e0f2f1;
+      color: var(--dark);
+      position: sticky;
+      top: 0
+    }
+
+    body.dark th {
+      background: #203b40;
+      color: #b9f1ea
+    }
+
+    tr:hover {
+      background: rgba(0, 121, 107, .04)
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: 800;
+      display: inline-block
+    }
+
+    .available,
+    .paid,
+    .completed,
+    .confirmed {
+      background: #c8e6c9;
+      color: #2e7d32
+    }
+
+    .booked,
+    .cancelled {
+      background: #ffcdd2;
+      color: #c62828
+    }
+
+    .maintenance,
+    .pending {
+      background: #ffe0b2;
+      color: #ef6c00
+    }
+
+    .checkedin {
+      background: #bbdefb;
+      color: #1565c0
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column
+    }
+
+    .form-group label {
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: var(--muted)
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: 0;
+      background: var(--card);
+      color: var(--text)
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary2)
+    }
+
+    textarea {
+      resize: vertical
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px
+    }
+
+    .room-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 17px;
+      background: var(--card)
+    }
+
+    .room-card h3 {
+      color: var(--primary2);
+      margin-bottom: 8px
+    }
+
+    .price {
+      font-size: 21px;
+      font-weight: 800;
+      margin: 10px 0
+    }
+
+    .progress {
+      height: 9px;
+      background: var(--border);
+      border-radius: 20px;
+      overflow: hidden
+    }
+
+    .progress>span {
+      display: block;
+      height: 100%;
+      background: var(--primary2)
+    }
+
+    .chart {
+      height: 220px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 20px 8px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 18px;
+      background: var(--primary2);
+      border-radius: 6px 6px 0 0;
+      position: relative
+    }
+
+    .bar span {
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--muted)
+    }
+
+    .bar b {
+      position: absolute;
+      top: -19px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px
+    }
+
+    .list {
+      display: grid;
+      gap: 10px
+    }
+
+    .activity {
+      padding: 10px;
+      border-left: 3px solid var(--primary2);
+      background: rgba(0, 121, 107, .05);
+      border-radius: 6px;
+      font-size: 13px
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      justify-content: center;
+      align-items: center;
+      z-index: 100
+    }
+
+    .modal-content {
+      background: var(--card);
+      color: var(--text);
+      width: 92%;
+      max-width: 700px;
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 14px;
+      padding: 22px
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 18px
+    }
+
+    .close {
+      font-size: 25px;
+      cursor: pointer;
+      color: var(--muted)
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #263238;
+      color: #fff;
+      padding: 13px 17px;
+      border-radius: 9px;
+      display: none;
+      z-index: 200
+    }
+
+    .empty {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted)
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      background: #eef2ff;
+      color: #4338ca
+    }
+
+    .login {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #004d40, #00796b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500
+    }
+
+    .login-card {
+      width: 360px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .25)
+    }
+
+    .login-card h1 {
+      color: #00695c;
+      margin-bottom: 8px
+    }
+
+    .login-card p {
+      color: #667;
+      margin-bottom: 20px
+    }
+
+    .login-card .form-group {
+      margin-bottom: 14px
+    }
+
+    @media(max-width:1100px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .room-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media(max-width:750px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto
+      }
+
+      .menu {
+        display: flex;
+        overflow: auto
+      }
+
+      .menu button {
+        min-width: 125px;
+        text-align: center
+      }
+
+      .sidebar-footer {
+        display: none
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 12px
+      }
+
+      .cards,
+      .room-grid,
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .full {
+        grid-column: auto
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loginScreen" class="login">
+    <div class="login-card">
+      <h1>🏝️ WartikaSingh Resort</h1>
+      <p>WartikaSingh Resort Management System</p>
+      <div class="form-group"><label>Username</label><input id="loginUser" value="admin"></div>
+      <div class="form-group"><label>Password</label><input id="loginPass" type="password" value="admin123"></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:5px" onclick="login()">Login</button>
+      <small style="display:block;text-align:center;margin-top:12px;color:#777">
+        Admin: <b>admin</b> / <b>admin123</b><br>
+        Customer: <b>customer</b> / <b>customer123</b>
+      </small>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="logo">🏝️ <span>WartikaSingh</span> Resort</div>
+    <div class="menu">
+      <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+      <button onclick="showPage('guests',this)">👤 Guests</button>
+      <button onclick="showPage('rooms',this)">🛏️ Rooms</button>
+      <button onclick="showPage('bookings',this)">📅 Bookings</button>
+      <button onclick="showPage('billing',this)">💰 Billing</button>
+      <button onclick="showPage('reports',this)">📊 Reports</button>
+      <button onclick="showPage('settings',this)">⚙️ Settings</button>
+      <button onclick="showPage('about',this)">ℹ️ About</button>
+    </div>
+    <div class="sidebar-footer">Advanced Edition v2.0<br>HTML • CSS • JavaScript • LocalStorage</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2 id="pageTitle">Dashboard</h2><small>Smart Resort Operations Console</small>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-secondary btn-sm" onclick="toggleTheme()">🎨 Theme</button>
+        <button class="btn btn-info btn-sm" onclick="exportData()">⬇ Export</button>
+        <button class="btn btn-warning btn-sm" onclick="document.getElementById('importFile').click()">⬆ Import</button>
+        <input id="importFile" type="file" accept=".json" style="display:none" onchange="importData(event)">
+        <span class="admin">👨‍💼 Admin</span>
+        <button class="btn btn-danger btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <section id="dashboard" class="page active">
+      <div class="cards">
+        <div class="card"><span class="icon">👥</span>
+          <h4>Total Guests</h4>
+          <div class="number" id="totalGuests">0</div>
+        </div>
+        <div class="card"><span class="icon">🛏️</span>
+          <h4>Total Rooms</h4>
+          <div class="number" id="totalRooms">0</div>
+        </div>
+        <div class="card"><span class="icon">📅</span>
+          <h4>Active Bookings</h4>
+          <div class="number" id="totalBookings">0</div>
+        </div>
+        <div class="card"><span class="icon">💰</span>
+          <h4>Paid Revenue</h4>
+          <div class="number" id="totalRevenue">₹0</div>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="section">
+          <div class="section-header">
+            <h3>Revenue — Last 7 Days</h3><span class="badge" id="occupancyBadge">Occupancy 0%</span>
+          </div>
+          <div class="chart" id="revenueChart"></div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <h3>Quick Health</h3>
+          </div>
+          <div class="list">
+            <div><small>Room Occupancy</small>
+              <div class="progress"><span id="occupancyBar" style="width:0%"></span></div><b id="occupancyText">0%</b>
+            </div>
+            <div><small>Paid Collection</small>
+              <div class="progress"><span id="collectionBar" style="width:0%"></span></div><b id="collectionText">0%</b>
+            </div>
+            <div><small>Pending Payments</small>
+              <div class="progress"><span id="pendingBar" style="width:0%"></span></div><b id="pendingText">0</b>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h3>Recent Bookings</h3><button class="btn btn-primary" onclick="showPage('bookings')">View All</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentBookings"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h3>Recent Activity</h3>
+        </div>
+        <div id="activityList" class="list"></div>
+      </div>
+    </section>
+
+    <section id="guests" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>Guest Management</h3><button class="btn btn-primary" onclick="openGuestModal()">+ Add Guest</button>
+        </div>
+        <div class="toolbar"><input class="search" id="guestSearch" placeholder="🔍 Search name, phone, email..."
+            oninput="renderGuests()"><select id="guestCityFilter" onchange="renderGuests()">
+            <option value="">All Cities</option>
+          </select></div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Bookings</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="guestTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>Room Management</h3><button class="btn btn-primary" onclick="openRoomModal()">+ Add Room</button>
+        </div>
+        <div class="toolbar"><input class="search" id="roomSearch" placeholder="🔍 Search room/type..."
+            oninput="renderRooms()"><select id="roomFilter" onchange="renderRooms()">
+            <option value="">All Status</option>
+            <option>Available</option>
+            <option>Booked</option>
+            <option>Maintenance</option>
+          </select></div>
+        <div class="room-grid" id="roomGrid"></div>
+      </div>
+    </section>
+
+    <section id="bookings" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>Booking Management</h3><button class="btn btn-primary" onclick="openBookingModal()">+ New Booking</button>
+        </div>
+        <div class="toolbar"><input class="search" id="bookingSearch" placeholder="🔍 Search booking/guest..."
+            oninput="renderBookings()"><select id="bookingFilter" onchange="renderBookings()">
+            <option value="">All Status</option>
+            <option>Confirmed</option>
+            <option>Checked-In</option>
+            <option>Completed</option>
+            <option>Cancelled</option>
+          </select></div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Dates</th>
+                <th>Nights</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookingTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="billing" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>Billing & Revenue</h3>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h4>Paid Revenue</h4>
+            <div class="number" id="billRevenue">₹0</div>
+          </div>
+          <div class="card">
+            <h4>Paid Bills</h4>
+            <div class="number" id="completedBills">0</div>
+          </div>
+          <div class="card">
+            <h4>Pending Bills</h4>
+            <div class="number" id="pendingBills">0</div>
+          </div>
+          <div class="card">
+            <h4>Average Bill</h4>
+            <div class="number" id="averageBill">₹0</div>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Booking</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="billingTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="reports" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>Reports & Analytics</h3><button class="btn btn-info" onclick="printReport()">🖨 Print Report</button>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h4>Room Utilization</h4>
+            <div class="number" id="reportOccupancy">0%</div>
+          </div>
+          <div class="card">
+            <h4>Booking Conversion</h4>
+            <div class="number" id="reportConversion">0%</div>
+          </div>
+          <div class="card">
+            <h4>Cancelled</h4>
+            <div class="number" id="reportCancelled">0</div>
+          </div>
+          <div class="card">
+            <h4>Top Room Type</h4>
+            <div class="number" style="font-size:20px" id="topRoomType">—</div>
+          </div>
+        </div>
+        <div class="section" style="box-shadow:none;padding:0">
+          <h3 style="margin-bottom:12px;color:var(--primary2)">Booking Status Distribution</h3>
+          <div id="statusReport" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="page">
+      <div class="section">
+        <div class="section-header">
+          <h3>System Settings</h3>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>Resort Name</label><input id="settingName" value="WartikaSingh Resort"></div>
+          <div class="form-group"><label>Currency</label><select id="settingCurrency">
+              <option>₹ INR</option>
+              <option>$ USD</option>
+              <option>€ EUR</option>
+            </select></div>
+          <div class="form-group"><label>Default Check-In Time</label><input id="settingCheckin" type="time"
+              value="12:00"></div>
+          <div class="form-group"><label>Default Check-Out Time</label><input id="settingCheckout" type="time"
+              value="10:00"></div>
+          <div class="form-group full"><button class="btn btn-primary" onclick="saveSettings()">Save
+              Settings</button><button class="btn btn-danger" style="margin-left:8px" onclick="resetData()">Reset Demo
+              Data</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="page">
+      <div class="section">
+        <h2 style="color:var(--primary2);margin-bottom:12px">WartikaSingh Resort — Advanced Edition</h2>
+        <p style="line-height:1.8">An enhanced web-based Resort Management System built with HTML5, CSS3 and JavaScript.
+          Data is persisted in browser LocalStorage for demonstration purposes.</p>
+        <br>
+        <h3 style="color:var(--primary2)">Advanced Features</h3>
+        <ul style="line-height:2;margin:12px 0 0 22px">
+          <li>Admin login/session screen</li>
+          <li>Dashboard KPIs and revenue chart</li>
+          <li>Guest search and city filtering</li>
+          <li>Room status and occupancy management</li>
+          <li>Date-overlap booking validation</li>
+          <li>Check-in, completion and cancellation workflow</li>
+          <li>Automatic billing and printable invoices</li>
+          <li>Reports and analytics</li>
+          <li>Dark mode</li>
+          <li>JSON export/import backup</li>
+          <li>Activity log and audit trail</li>
+          <li>Responsive mobile-friendly interface</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- GUEST MODAL -->
+  <div class="modal" id="guestModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Guest</h3><span class="close" onclick="closeModal('guestModal')">&times;</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Guest Name *</label><input id="guestName"></div>
+        <div class="form-group"><label>Phone *</label><input id="guestPhone" maxlength="10"></div>
+        <div class="form-group"><label>Email *</label><input id="guestEmail" type="email"></div>
+        <div class="form-group"><label>City</label><input id="guestCity"></div>
+        <div class="form-group full"><label>Address</label><textarea id="guestAddress" rows="3"></textarea></div>
+        <div class="full"><button class="btn btn-primary" onclick="addGuest()">Save Guest</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOM MODAL -->
+  <div class="modal" id="roomModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Room</h3><span class="close" onclick="closeModal('roomModal')">&times;</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Room Number *</label><input id="roomNumber"></div>
+        <div class="form-group"><label>Room Type</label><select id="roomType">
+            <option>Standard</option>
+            <option>Deluxe</option>
+            <option>Suite</option>
+            <option>Premium Suite</option>
+            <option>Villa</option>
+          </select></div>
+        <div class="form-group"><label>Price / Night *</label><input id="roomPrice" type="number" min="1"></div>
+        <div class="form-group"><label>Capacity</label><input id="roomCapacity" type="number" min="1" value="2"></div>
+        <div class="form-group"><label>Status</label><select id="roomStatus">
+            <option>Available</option>
+            <option>Maintenance</option>
+          </select></div>
+        <div class="full"><button class="btn btn-primary" onclick="addRoom()">Save Room</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING MODAL -->
+  <div class="modal" id="bookingModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>New Booking</h3><span class="close" onclick="closeModal('bookingModal')">&times;</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Guest *</label><select id="bookingGuest"></select></div>
+        <div class="form-group"><label>Room *</label><select id="bookingRoom"></select></div>
+        <div class="form-group"><label>Check-In *</label><input id="checkIn" type="date"></div>
+        <div class="form-group"><label>Check-Out *</label><input id="checkOut" type="date"></div>
+        <div class="form-group"><label>Guests</label><input id="numberOfGuests" type="number" min="1" value="1"></div>
+        <div class="form-group"><label>Payment</label><select id="paymentStatus">
+            <option>Pending</option>
+            <option>Paid</option>
+          </select></div>
+        <div class="form-group full"><label>Special Request</label><textarea id="bookingNote" rows="2"
+            placeholder="Optional note"></textarea></div>
+        <div class="full"><button class="btn btn-primary" onclick="addBooking()">Create Booking</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const KEY = "royal_resort_v2";
+    let data = JSON.parse(localStorage.getItem(KEY) || "null") || {
+      guests: [
+        { id: "G001", name: "Rahul Sharma", phone: "9876543210", email: "rahul@gmail.com", city: "Bhopal", address: "MP Nagar, Bhopal" },
+        { id: "G002", name: "Priya Verma", phone: "9123456780", email: "priya@gmail.com", city: "Indore", address: "Vijay Nagar, Indore" }
+      ],
+      rooms: [
+        { id: "R001", number: "101", type: "Deluxe", price: 3500, capacity: 2, status: "Available" },
+        { id: "R002", number: "102", type: "Standard", price: 2500, capacity: 2, status: "Available" },
+        { id: "R003", number: "201", type: "Suite", price: 6000, capacity: 4, status: "Maintenance" },
+        { id: "R004", number: "202", type: "Premium Suite", price: 8000, capacity: 4, status: "Available" }
+      ],
+      bookings: [
+        { id: "B001", guestId: "G001", roomId: "R001", checkIn: "2026-08-10", checkOut: "2026-08-12", amount: 7000, payment: "Paid", status: "Completed", guests: 2, note: "" },
+        { id: "B002", guestId: "G002", roomId: "R002", checkIn: "2026-08-18", checkOut: "2026-08-20", amount: 5000, payment: "Pending", status: "Confirmed", guests: 2, note: "Late arrival" }
+      ],
+      activity: []
+    };
+    let settings = JSON.parse(localStorage.getItem("royal_settings") || "null") || { name: "WartikaSingh Resort", currency: "₹ INR", checkin: "12:00", checkout: "10:00" };
+
+    function save() { localStorage.setItem(KEY, JSON.stringify(data)); localStorage.setItem("royal_settings", JSON.stringify(settings)) }
+    function uid(prefix, arr) { let n = arr.reduce((m, x) => Math.max(m, parseInt(String(x.id).replace(/\D/g, "")) || 0), 0) + 1; return prefix + String(n).padStart(3, "0") }
+    function money(n) { let sym = settings.currency.startsWith("$") ? "$" : settings.currency.startsWith("€") ? "€" : "₹"; return sym + Number(n || 0).toLocaleString("en-IN") }
+    function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])) }
+    function guest(id) { return data.guests.find(x => x.id === id) }
+    function room(id) { return data.rooms.find(x => x.id === id) }
+    function nights(a, b) { return Math.ceil((new Date(b) - new Date(a)) / 86400000) }
+    function fmt(d) { if (!d) return "-"; return new Date(d + "T00:00:00").toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) }
+    function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2400) }
+    function log(msg) { data.activity.unshift({ time: new Date().toLocaleString("en-IN"), msg }); data.activity = data.activity.slice(0, 12); save() }
+    function showPage(id, btn) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); document.getElementById(id).classList.add("active");
+      document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active")); if (btn) btn.classList.add("active");
+      const titles = { dashboard: "Dashboard", guests: "Guest Management", rooms: "Room Management", bookings: "Booking Management", billing: "Billing & Revenue", reports: "Reports & Analytics", settings: "System Settings", about: "About Project" };
+      document.getElementById("pageTitle").textContent = titles[id] || "Dashboard"; renderAll();
+    }
+    function openGuestModal() { clearGuest(); document.getElementById("guestModal").style.display = "flex" }
+    function clearGuest() { ["guestName", "guestPhone", "guestEmail", "guestCity", "guestAddress"].forEach(id => document.getElementById(id).value = "") }
+    function openRoomModal() { ["roomNumber", "roomPrice"].forEach(id => document.getElementById(id).value = ""); document.getElementById("roomCapacity").value = 2; document.getElementById("roomModal").style.display = "flex" }
+    function openBookingModal() { updateBookingDropdowns(); document.getElementById("checkIn").value = new Date().toISOString().slice(0, 10); document.getElementById("checkOut").value = new Date(Date.now() + 86400000).toISOString().slice(0, 10); document.getElementById("bookingModal").style.display = "flex" }
+    function closeModal(id) { document.getElementById(id).style.display = "none" }
+    window.onclick = e => document.querySelectorAll(".modal").forEach(m => { if (e.target === m) m.style.display = "none" });
+
+    function addGuest() {
+      const name = guestName.value.trim(), phone = guestPhone.value.trim(), email = guestEmail.value.trim();
+      if (name.length < 2 || !/^\d{10}$/.test(phone) || !email.includes("@")) return alert("Enter a valid name, 10-digit phone and email.");
+      if (data.guests.some(g => g.phone === phone)) return alert("A guest with this phone already exists.");
+      const g = { id: uid("G", data.guests), name, phone, email, city: guestCity.value.trim(), address: guestAddress.value.trim() };
+      data.guests.push(g); log("Added guest: " + name); save(); closeModal("guestModal"); renderAll(); toast("Guest added successfully.");
+    }
+    function renderGuests() {
+      const q = (document.getElementById("guestSearch")?.value || "").toLowerCase(), city = document.getElementById("guestCityFilter")?.value || "";
+      const cities = [...new Set(data.guests.map(g => g.city).filter(Boolean))]; const cf = document.getElementById("guestCityFilter");
+      if (cf) { const old = cf.value; cf.innerHTML = '<option value="">All Cities</option>' + cities.map(c => `<option>${esc(c)}</option>`).join(""); cf.value = cities.includes(old) ? old : "" }
+      const list = data.guests.filter(g => (!q || [g.name, g.phone, g.email, g.city].join(" ").toLowerCase().includes(q)) && (!city || g.city === city));
+      const tb = document.getElementById("guestTable"); tb.innerHTML = list.length ? list.map(g => `<tr><td>${g.id}</td><td><b>${esc(g.name)}</b></td><td>${esc(g.phone)}</td><td>${esc(g.email)}</td><td>${esc(g.city || "-")}</td><td>${data.bookings.filter(b => b.guestId === g.id).length}</td><td><button class="btn btn-danger btn-sm" onclick="deleteGuest('${g.id}')">Delete</button></td></tr>`).join("") : '<tr><td colspan="7" class="empty">No guests found</td></tr>';
+    }
+    function deleteGuest(id) { if (data.bookings.some(b => b.guestId === id)) return alert("Guest has booking history and cannot be deleted."); if (confirm("Delete guest?")) { let g = guest(id); data.guests = data.guests.filter(x => x.id !== id); log("Deleted guest: " + g?.name); save(); renderAll(); toast("Guest deleted.") } }
+
+    function addRoom() {
+      const number = roomNumber.value.trim(), price = Number(roomPrice.value), capacity = Number(roomCapacity.value) || 2;
+      if (!number || price <= 0) return alert("Enter valid room number and price.");
+      if (data.rooms.some(r => r.number === number)) return alert("Room number already exists.");
+      data.rooms.push({ id: uid("R", data.rooms), number, type: roomType.value, price, capacity, status: roomStatus.value });
+      log("Added room: " + number); save(); closeModal("roomModal"); renderAll(); toast("Room added.");
+    }
+    function renderRooms() {
+      const q = (document.getElementById("roomSearch")?.value || "").toLowerCase(), f = document.getElementById("roomFilter")?.value || "";
+      const list = data.rooms.filter(r => (!q || `${r.number} ${r.type}`.toLowerCase().includes(q)) && (!f || r.status === f)), grid = document.getElementById("roomGrid");
+      grid.innerHTML = list.length ? list.map(r => { let cls = r.status.toLowerCase(); return `<div class="room-card"><h3>Room ${esc(r.number)}</h3><p><b>Type:</b> ${esc(r.type)} &nbsp; <b>Capacity:</b> ${r.capacity}</p><p class="price">${money(r.price)} <small>/ night</small></p><p>Status: <span class="status ${cls}">${r.status}</span></p><br><button class="btn btn-warning btn-sm" onclick="toggleRoom('${r.id}')">Change Status</button> <button class="btn btn-danger btn-sm" onclick="deleteRoom('${r.id}')">Delete</button></div>` }).join("") : '<div class="empty">No rooms found</div>';
+    }
+    function toggleRoom(id) { let r = room(id); if (!r) return; r.status = r.status === "Available" ? "Maintenance" : "Available"; log(`Room ${r.number} status changed to ${r.status}`); save(); renderAll(); toast("Room status updated.") }
+    function deleteRoom(id) { if (data.bookings.some(b => b.roomId === id)) return alert("Room has booking history and cannot be deleted."); if (confirm("Delete room?")) { data.rooms = data.rooms.filter(r => r.id !== id); save(); renderAll(); toast("Room deleted.") } }
+
+    function overlap(roomId, ci, co, ignoreId = null) { return data.bookings.some(b => b.roomId === roomId && b.status !== "Cancelled" && b.id !== ignoreId && ci < b.checkOut && co > b.checkIn) }
+    function updateBookingDropdowns() {
+      bookingGuest.innerHTML = data.guests.map(g => `<option value="${g.id}">${esc(g.name)} — ${g.phone}</option>`).join("");
+      bookingRoom.innerHTML = data.rooms.filter(r => r.status !== "Maintenance").map(r => `<option value="${r.id}">Room ${esc(r.number)} — ${esc(r.type)} — ${money(r.price)}</option>`).join("");
+    }
+    function addBooking() {
+      const gid = bookingGuest.value, rid = bookingRoom.value, ci = checkIn.value, co = checkOut.value, n = Number(numberOfGuests.value) || 1;
+      if (!gid || !rid || !ci || !co) return alert("Fill all booking details.");
+      if (n < 1) return alert("Number of guests must be at least 1.");
+      if (nights(ci, co) <= 0) return alert("Check-out must be after check-in.");
+      const r = room(rid); if (!r) return alert("Room not found."); if (n > r.capacity) return alert(`Room capacity is ${r.capacity}.`);
+      if (overlap(rid, ci, co)) return alert("This room is already booked for the selected dates.");
+      const amount = nights(ci, co) * r.price;
+      data.bookings.push({ id: uid("B", data.bookings), guestId: gid, roomId: rid, checkIn: ci, checkOut: co, amount, payment: paymentStatus.value, status: "Confirmed", guests: n, note: bookingNote.value.trim() });
+      log(`Created booking for ${guest(gid)?.name} — Room ${r.number}`); save(); closeModal("bookingModal"); renderAll(); toast("Booking created successfully.");
+    }
+    function renderBookings() {
+      const q = (document.getElementById("bookingSearch")?.value || "").toLowerCase(), f = document.getElementById("bookingFilter")?.value || "";
+      const list = data.bookings.filter(b => (!q || `${b.id} ${guest(b.guestId)?.name || ""}`.toLowerCase().includes(q)) && (!f || b.status === f));
+      bookingTable.innerHTML = list.length ? list.map(b => { let r = room(b.roomId); return `<tr><td>${b.id}</td><td>${esc(guest(b.guestId)?.name || "Unknown")}</td><td>${r?.number || "-"}</td><td>${fmt(b.checkIn)} → ${fmt(b.checkOut)}</td><td>${nights(b.checkIn, b.checkOut)}</td><td>${money(b.amount)}</td><td><span class="status ${b.payment.toLowerCase()}">${b.payment}</span></td><td><span class="status ${b.status.toLowerCase().replace("-", "")}">${b.status}</span></td><td>${b.status === "Confirmed" ? `<button class="btn btn-info btn-sm" onclick="checkIn('${b.id}')">Check-In</button>` : ""} ${b.status === "Checked-In" ? `<button class="btn btn-primary btn-sm" onclick="completeBooking('${b.id}')">Complete</button>` : ""} ${b.status !== "Cancelled" && b.status !== "Completed" ? `<button class="btn btn-danger btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>` : ""} <button class="btn btn-secondary btn-sm" onclick="printBill('${b.id}')">Bill</button></td></tr>` }).join("") : '<tr><td colspan="9" class="empty">No bookings found</td></tr>';
+    }
+    function checkIn(id) { let b = data.bookings.find(x => x.id === id); if (b) { b.status = "Checked-In"; log("Guest checked in: " + guest(b.guestId)?.name); save(); renderAll(); toast("Guest checked in.") } }
+    function completeBooking(id) { let b = data.bookings.find(x => x.id === id); if (b) { b.status = "Completed"; log("Booking completed: " + id); save(); renderAll(); toast("Booking completed.") } }
+    function cancelBooking(id) { let b = data.bookings.find(x => x.id === id); if (!b || !confirm("Cancel this booking?")) return; b.status = "Cancelled"; log("Cancelled booking: " + id); save(); renderAll(); toast("Booking cancelled.") }
+    function renderBilling() {
+      let paid = data.bookings.filter(b => b.payment === "Paid"), pending = data.bookings.filter(b => b.payment !== "Paid"), rev = paid.reduce((s, b) => s + b.amount, 0);
+      billRevenue.textContent = money(rev); completedBills.textContent = paid.length; pendingBills.textContent = pending.length; averageBill.textContent = money(data.bookings.length ? data.bookings.reduce((s, b) => s + b.amount, 0) / data.bookings.length : 0);
+      billingTable.innerHTML = data.bookings.length ? data.bookings.map(b => { let r = room(b.roomId); return `<tr><td>BL-${b.id}</td><td>${b.id}</td><td>${esc(guest(b.guestId)?.name || "-")}</td><td>${r?.number || "-"}</td><td>${money(b.amount)}</td><td><span class="status ${b.payment.toLowerCase()}">${b.payment}</span></td><td>${b.payment === "Pending" ? `<button class="btn btn-primary btn-sm" onclick="markPaid('${b.id}')">Mark Paid</button>` : ""} <button class="btn btn-info btn-sm" onclick="printBill('${b.id}')">Print</button></td></tr>` }).join("") : '<tr><td colspan="7" class="empty">No billing records</td></tr>';
+    }
+    function markPaid(id) { let b = data.bookings.find(x => x.id === id); if (b) { b.payment = "Paid"; log("Payment received for " + id); save(); renderAll(); toast("Payment marked as paid.") } }
+    function printBill(id) {
+      const b = data.bookings.find(x => x.id === id); if (!b) return; const g = guest(b.guestId), r = room(b.roomId), w = window.open("", "_blank", "width=750,height=750");
+      w.document.write(`<html><head><title>Invoice ${b.id}</title><style>body{font-family:Arial;padding:40px;color:#263238}h1{color:#00695c}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{padding:12px;border:1px solid #ddd;text-align:left}.total{font-size:24px;font-weight:bold}</style></head><body><h1>🏝️ WartikaSingh Resort</h1><p>Guest Invoice</p><hr><p><b>Bill ID:</b> BL-${b.id}</p><p><b>Guest:</b> ${esc(g?.name || "-")} (${esc(g?.phone || "-")})</p><table><tr><th>Room</th><th>Check-In</th><th>Check-Out</th><th>Nights</th><th>Amount</th></tr><tr><td>${r?.number || "-"} — ${r?.type || ""}</td><td>${fmt(b.checkIn)}</td><td>${fmt(b.checkOut)}</td><td>${nights(b.checkIn, b.checkOut)}</td><td>${money(b.amount)}</td></tr></table><p class="total">Total: ${money(b.amount)}</p><p>Payment: <b>${b.payment}</b></p><br><p>Thank you for choosing WartikaSingh Resort.</p><script>window.print()<\/script></body></html>`); w.document.close();
+    }
+    function renderDashboard() {
+      totalGuests.textContent = data.guests.length; totalRooms.textContent = data.rooms.length; totalBookings.textContent = data.bookings.filter(b => b.status !== "Cancelled" && b.status !== "Completed").length;
+      const rev = data.bookings.filter(b => b.payment === "Paid").reduce((s, b) => s + b.amount, 0); totalRevenue.textContent = money(rev);
+      const occupied = data.rooms.filter(r => r.status === "Booked").length, occ = data.rooms.length ? Math.round(occupied / data.rooms.length * 100) : 0;
+      occupancyBadge.textContent = `Occupancy ${occ}%`; occupancyBar.style.width = occ + "%"; occupancyText.textContent = occ + "%";
+      const total = data.bookings.reduce((s, b) => s + b.amount, 0), paidPct = total ? Math.round(rev / total * 100) : 0; collectionBar.style.width = paidPct + "%"; collectionText.textContent = paidPct + "%";
+      pendingBar.style.width = Math.min(100, data.bookings.filter(b => b.payment === "Pending").length * 20) + "%"; pendingText.textContent = data.bookings.filter(b => b.payment === "Pending").length;
+      recentBookings.innerHTML = data.bookings.slice(-6).reverse().map(b => `<tr><td>${b.id}</td><td>${esc(guest(b.guestId)?.name || "-")}</td><td>${room(b.roomId)?.number || "-"}</td><td>${fmt(b.checkIn)}</td><td>${fmt(b.checkOut)}</td><td>${money(b.amount)}</td><td><span class="status ${b.status.toLowerCase().replace("-", "")}">${b.status}</span></td></tr>`).join("") || '<tr><td colspan="7" class="empty">No bookings</td></tr>';
+      const vals = Array.from({ length: 7 }, (_, i) => { let d = new Date(); d.setDate(d.getDate() - 6 + i); let key = d.toISOString().slice(0, 10); return { day: d.toLocaleDateString("en-IN", { weekday: "short" }), v: data.bookings.filter(b => b.payment === "Paid" && b.checkIn === key).reduce((s, b) => s + b.amount, 0) } }), mx = Math.max(1, ...vals.map(x => x.v));
+      revenueChart.innerHTML = vals.map(x => `<div class="bar" style="height:${Math.max(8, x.v / mx * 170)}px"><b>${x.v ? money(x.v) : "0"}</b><span>${x.day}</span></div>`).join("");
+      activityList.innerHTML = (data.activity.length ? data.activity : ["No activity yet"]).map(x => typeof x === "string" ? `<div class="activity">${x}</div>` : `<div class="activity"><b>${x.time}</b><br>${esc(x.msg)}</div>`).join("");
+    }
+    function renderReports() {
+      const active = data.bookings.filter(b => b.status !== "Cancelled").length, occ = data.rooms.length ? Math.round(data.rooms.filter(r => r.status === "Booked").length / data.rooms.length * 100) : 0;
+      reportOccupancy.textContent = occ + "%"; reportCancelled.textContent = data.bookings.filter(b => b.status === "Cancelled").length; reportConversion.textContent = data.bookings.length ? Math.round(active / data.bookings.length * 100) + "%" : "0%";
+      const counts = {}; data.bookings.forEach(b => { let t = room(b.roomId)?.type; if (t) counts[t] = (counts[t] || 0) + 1 }); topRoomType.textContent = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0] || "—";
+      const statuses = ["Confirmed", "Checked-In", "Completed", "Cancelled"]; statusReport.innerHTML = statuses.map(s => { let n = data.bookings.filter(b => b.status === s).length, p = data.bookings.length ? Math.round(n / data.bookings.length * 100) : 0; return `<div><div style="display:flex;justify-content:space-between"><b>${s}</b><span>${n} (${p}%)</span></div><div class="progress"><span style="width:${p}%"></span></div></div>` }).join("");
+    }
+    function renderAll() { save(); renderDashboard(); renderGuests(); renderRooms(); renderBookings(); renderBilling(); renderReports() }
+    function toggleTheme() { document.body.classList.toggle("dark"); localStorage.setItem("royal_theme", document.body.classList.contains("dark") ? "dark" : "light") }
+    function exportData() { const blob = new Blob([JSON.stringify({ data, settings }, null, 2)], { type: "application/json" }), a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "royal-resort-backup.json"; a.click(); URL.revokeObjectURL(a.href); toast("Backup exported.") }
+    function importData(e) { const file = e.target.files[0]; if (!file) return; const r = new FileReader(); r.onload = () => { try { const x = JSON.parse(r.result); if (!x.data?.guests || !x.data?.rooms || !x.data?.bookings) throw Error(); data = x.data; settings = x.settings || settings; settings.name = settings.name || "WartikaSingh Resort"; save(); renderAll(); toast("Backup imported.") } catch { alert("Invalid backup file.") } }; r.readAsText(file); e.target.value = "" }
+    function saveSettings() { settings.name = settingName.value.trim() || "WartikaSingh Resort"; settings.currency = settingCurrency.value; settings.checkin = settingCheckin.value; settings.checkout = settingCheckout.value; save(); renderAll(); toast("Settings saved.") }
+    function resetData() { if (confirm("Reset all data to demo data? This cannot be undone.")) { localStorage.removeItem(KEY); localStorage.removeItem("royal_settings"); location.reload() } }
+    function printReport() { const w = window.open("", "_blank"); w.document.write(`<html><head><title>Resort Report</title></head><body style="font-family:Arial;padding:35px"><h1>WartikaSingh Resort — Management Report</h1><p>Generated: ${new Date().toLocaleString("en-IN")}</p><hr><h2>KPIs</h2><p>Total Guests: ${data.guests.length}</p><p>Total Rooms: ${data.rooms.length}</p><p>Total Bookings: ${data.bookings.length}</p><p>Paid Revenue: ${money(data.bookings.filter(b => b.payment === "Paid").reduce((s, b) => s + b.amount, 0))}</p><h2>Bookings</h2><table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%"><tr><th>ID</th><th>Guest</th><th>Room</th><th>Dates</th><th>Amount</th><th>Status</th></tr>${data.bookings.map(b => `<tr><td>${b.id}</td><td>${esc(guest(b.guestId)?.name || "-")}</td><td>${room(b.roomId)?.number || "-"}</td><td>${fmt(b.checkIn)} - ${fmt(b.checkOut)}</td><td>${money(b.amount)}</td><td>${b.status}</td></tr>`).join("")}</table><script>window.print()<\/script></body></html>`); w.document.close() }
+    function login() {
+      const u = loginUser.value.trim().toLowerCase(), p = loginPass.value;
+      if (u === "admin" && p === "admin123") {
+        sessionStorage.setItem("royal_logged", "1");
+        sessionStorage.setItem("royal_role", "Admin");
+        document.querySelector(".admin").textContent = "👨‍💼 Admin";
+        loginScreen.style.display = "none"; toast("Welcome, Admin.");
+      } else if (u === "customer" && p === "customer123") {
+        sessionStorage.setItem("royal_logged", "1");
+        sessionStorage.setItem("royal_role", "Customer");
+        document.querySelector(".admin").textContent = "👤 Customer";
+        loginScreen.style.display = "none"; toast("Welcome, Customer.");
+      } else alert("Invalid username or password.");
+    }
+    function logout() { sessionStorage.removeItem("royal_logged"); loginScreen.style.display = "flex" }
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem("royal_logged")) {
+        loginScreen.style.display = "none";
+        const role = sessionStorage.getItem("royal_role") || "Admin";
+        document.querySelector(".admin").textContent = role === "Customer" ? "👤 Customer" : "👨‍💼 Admin";
+      }
+      if (localStorage.getItem("royal_theme") === "dark") document.body.classList.add("dark");
+      settingName.value = settings.name; settingCurrency.value = settings.currency; settingCheckin.value = settings.checkin; settingCheckout.value = settings.checkout;
+      log("Application opened"); renderAll();
+    });
+  </script>
+</body>
+
+</html>
